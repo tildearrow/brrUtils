@@ -42,6 +42,7 @@ long brrEncode(short* buf, unsigned char* out, long len) {
   unsigned char filter=0;
   unsigned char range=0;
   unsigned char o=0;
+  short o0=0;
 
   len&=~15;
   for (long i=0; i<len; i+=16) {
@@ -60,7 +61,10 @@ long brrEncode(short* buf, unsigned char* out, long len) {
     switch (filter) {
       case 0:
         for (int j=0; j<16; j++) {
-          o=(buf[j]>>range)&15;
+          o0=buf[j]>>range;
+          if (o0>7) o0=7;
+          if (o0<-8) o0=-8;
+          o=o0&15;
           if (j&1) {
             next[1+(j>>1)]|=o;
           } else {

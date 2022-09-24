@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
     for (int i=0; i<CHUNK_SIZE; i++) {
       int accum=0;
       for (int j=0; j<si.channels; j++) {
-        accum+=nextChunkF[i*si.channels+j]*20767.0f;
+        accum+=nextChunkF[i*si.channels+j]*32767.0f;
       }
       accum/=si.channels;
       if (accum<-32768) accum=-32768;
