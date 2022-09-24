@@ -79,7 +79,7 @@ long brrDecode(unsigned char* buf, short* out, long len) {
     }
 
     // end bit
-    total+=9;
+    total+=16;
     if (control&1) break;
     buf+=9;
   }
