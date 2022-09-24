@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
   printf("output: %ld samples\n",decoded);
 
   SF_INFO si;
-  si.samplerate=8000;
+  si.samplerate=32000;
   si.channels=1;
   si.format=SF_FORMAT_WAV|SF_FORMAT_PCM_16;
 
