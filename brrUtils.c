@@ -22,7 +22,7 @@
 
 #include "brrUtils.h"
 
-long brrEncode(short* buf, unsigned char* out, long len) {
+long brrEncode(short* buf, unsigned char* out, long len, long loopStart) {
   if (len==0) return 0;
 
   // encoding process:
@@ -45,10 +45,13 @@ long brrEncode(short* buf, unsigned char* out, long len) {
   short o0=0;
 
   len&=~15;
+  loopStart&=~15;
   for (long i=0; i<len; i+=16) {
-    // don't filter on the first block
-    if (i) {
+    // don't filter on the first or loop block
+    if (i && i!=loopStart) {
 
+    } else {
+      filter=0;
     }
 
     range=0;

@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
 
   printf("input: %ld samples\n",total);
 
-  long encoded=brrEncode(inBuf,outBuf,total);
+  long encoded=brrEncode(inBuf,outBuf,total,0);
 
   printf("output: %ld bytes (%ld blocks)\n",encoded,encoded/9);
 
