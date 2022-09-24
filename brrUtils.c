@@ -40,10 +40,10 @@ long brrEncode(short* buf, unsigned char* out, long len) {
       next+=(last1*15)/16; \
       break; \
     case 8: \
-      next+=(last1*61)/32-(last2*15)/16; \
+      next+=((last1*61)/32)-((last2*15)/16); \
       break; \
     case 12: \
-      next+=(last1*115)/64-(last2*13)/16; \
+      next+=((last1*115)/64)-((last2*13)/16); \
       break; \
   } \
 \
@@ -71,10 +71,10 @@ long brrDecode(unsigned char* buf, short* out, long len) {
     unsigned char control=buf[0];
 
     for (unsigned char j=1; j<9; j++) {
-      next=buf[j]&15;
+      next=buf[j]>>4;
       DO_ONE_SAMPLE;
 
-      next=buf[j]>>4;
+      next=buf[j]&15;
       DO_ONE_SAMPLE;
     }
 
