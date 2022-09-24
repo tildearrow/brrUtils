@@ -22,13 +22,14 @@
 
 #include "brrUtils.h"
 
-void brrEncode(short* buf, unsigned char* out, long len) {
-  if (len==0) return;
+long brrEncode(short* buf, unsigned char* out, long len) {
+  if (len==0) return 0;
   // TODO
+  return 0;
 }
 
 #define DO_ONE_SAMPLE \
-  if (next&8) next|=0xfff8; \
+  if (next&8) next|=0xfffffff8; \
 \
   next<<=(buf[0]>>4); /* range */ \
 \
@@ -54,8 +55,10 @@ void brrEncode(short* buf, unsigned char* out, long len) {
   *out=next; \
   out++;
 
-void brrDecode(unsigned char* buf, short* out, long len) {
-  if (len==0) return;
+long brrDecode(unsigned char* buf, short* out, long len) {
+  if (len==0) return 0;
+
+  long total=0;
 
   int last1=0;
   int last2=0;
@@ -76,7 +79,10 @@ void brrDecode(unsigned char* buf, short* out, long len) {
     }
 
     // end bit
+    total+=9;
     if (control&1) break;
     buf+=9;
   }
+
+  return total;
 }
