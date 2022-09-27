@@ -61,14 +61,17 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart) {
   // encoding process:
   // 1. read next group of 16 samples
   // 2. is this the first block?
-  //    - if yes, don't filter. output and then go to 1
+  //   - if yes, don't filter. output and then go to 1
   // 3. is this the loop block?
-  //    - if yes, don't filter. output and then go to 1
+  //   - if yes, don't filter. output and then go to 1
   // 4. try encoding using 4 filters
+  //   - perform linear prediction
+  //   - calculate range
+  //   - decode and apply correction to achieve low error
   // 5. which one of these yields the least amount of error?
   // 6. output the one which does
   // 7. is this the last block?
-  //    - if yes, mark end and finish
+  //   - if yes, mark end and finish
   // 8. go to 1
   long total=0;
   unsigned char next0[8];
