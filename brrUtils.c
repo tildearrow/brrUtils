@@ -110,6 +110,7 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart) {
     for (int j=0; j<16; j++) {
       short s=buf[j]-(buf[j]>>13);
       o0=s>>range0;
+      if (range0) if (s&(1<<(range1>>1))) o0++;
       if (o0>7) o0=7;
       if (o0<-8) o0=-8;
       if (range0>=12) if (o0<-7) o0=-7;
