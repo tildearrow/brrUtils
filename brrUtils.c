@@ -163,6 +163,7 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart) {
       for (int j=0; j<16; j++) {
         short s=pred1[j];
         o0=s>>range1;
+        if (range1) if (s&(1<<(range1>>1))) o0++;
         if (o0>7) o0=7;
         if (o0<-8) o0=-8;
         if (range1>=12) if (o0<-7) o0=-7;
@@ -258,7 +259,7 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart) {
       for (int j=0; j<2; j++) {
         if (avgError[j]<candError) {
           candError=avgError[j];
-          filter=1;
+          filter=j;
         }
       }
       //printf("block %ld: %8d %8d -> %d\n",i>>4,avgError[0],avgError[1],filter);
