@@ -338,6 +338,8 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart) {
           nextDec=next1[j]&15;
           DO_ONE_DEC(range1);
         }
+        o2=last2<<1;
+        o1=last1<<1;
         out[0]=(range1<<4)|(filter<<2)|((i+16>=len)?((loopStart>=0)?3:1):0);
         out[1]=next1[0];
         out[2]=next1[1];
@@ -355,6 +357,8 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart) {
           nextDec=next2[j]&15;
           DO_ONE_DEC(range2);
         }
+        o2=last2<<1;
+        o1=last1<<1;
         out[0]=(range2<<4)|(filter<<2)|((i+16>=len)?((loopStart>=0)?3:1):0);
         out[1]=next2[0];
         out[2]=next2[1];
@@ -372,6 +376,8 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart) {
           nextDec=next3[j]&15;
           DO_ONE_DEC(range3);
         }
+        o2=last2<<1;
+        o1=last1<<1;
         out[0]=(range3<<4)|(filter<<2)|((i+16>=len)?((loopStart>=0)?3:1):0);
         out[1]=next3[0];
         out[2]=next3[1];
