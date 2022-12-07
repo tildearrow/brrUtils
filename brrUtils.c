@@ -161,6 +161,7 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart, unsigne
   short x0=0;
   short x1=0;
   short x2=0;
+  int emphOut=0;
 
   short in[17];
 
@@ -202,7 +203,10 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart, unsigne
         x2=in[j];
 
         if (j==0) continue;
-        in[j-1]=((x1<<11)-x0*370-in[j]*374)/1305;
+        emphOut=((x1<<11)-x0*370-in[j]*374)/1305;
+        if (emphOut<-32768) emphOut=-32768;
+        if (emphOut>32767) emphOut=32767;
+        in[j-1]=emphOut;
       }
     }
 
@@ -253,11 +257,25 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart, unsigne
   // encode loop block
   if (loopStart>=0) {
     long p=loopStart;
-    for (int i=0; i<16; i++) {
+    for (int i=0; i<17; i++) {
       if (p>=len) {
         p=loopStart;
       }
       in[i]=buf[p++];
+    }
+
+    if (emphasis) {
+      for (int j=0; j<17; j++) {
+        x0=x1;
+        x1=x2;
+        x2=in[j];
+
+        if (j==0) continue;
+        emphOut=((x1<<11)-x0*370-in[j]*374)/1305;
+        if (emphOut<-32768) emphOut=-32768;
+        if (emphOut>32767) emphOut=32767;
+        in[j-1]=emphOut;
+      }
     }
 
     // encode (filter 0/1 only)
