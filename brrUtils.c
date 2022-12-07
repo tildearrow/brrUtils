@@ -191,9 +191,9 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart, unsigne
     }
     
     // emphasis
-    for (int j=0; j<16; j++) {
+    /*for (int j=0; j<16; j++) {
       x1=((in[j]<<11)-x0*370-x2*374)/1305;
-    }
+    }*/
 
     // encode
     for (int j=0; j<4; j++) {
