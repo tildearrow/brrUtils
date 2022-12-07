@@ -158,7 +158,11 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart, unsigne
   unsigned char filter=0;
   unsigned char range=0;
 
-  short in[16];
+  short x0=0;
+  short x1=0;
+  short x2=0;
+
+  short in[17];
 
   short last1[4][13];
   short last2[4][13];
@@ -172,9 +176,9 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart, unsigne
   memset(possibleOut,0,4*13*8);
 
   for (long i=0; i<len; i+=16) {
-    if (i+16>len) {
+    if (i+17>len) {
       long p=i;
-      for (int j=0; j<16; j++) {
+      for (int j=0; j<17; j++) {
         if (p>=len) {
           if (loopStart<0 || loopStart>=len) {
             in[j]=0;
@@ -187,13 +191,20 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart, unsigne
         }
       }
     } else {
-      memcpy(in,&buf[i],16*sizeof(short));
+      memcpy(in,&buf[i],17*sizeof(short));
     }
     
     // emphasis
-    /*for (int j=0; j<16; j++) {
-      x1=((in[j]<<11)-x0*370-x2*374)/1305;
-    }*/
+    if (emphasis) {
+      for (int j=0; j<17; j++) {
+        x0=x1;
+        x1=x2;
+        x2=in[j];
+
+        if (j==0) continue;
+        in[j-1]=((x1<<11)-x0*370-in[j]*374)/1305;
+      }
+    }
 
     // encode
     for (int j=0; j<4; j++) {
@@ -323,6 +334,8 @@ long brrEncode(short* buf, unsigned char* out, long len, long loopStart, unsigne
 long brrDecode(unsigned char* buf, short* out, long len, unsigned char emphasis) {
   if (len==0) return 0;
 
+  short* outOrig=out;
+
   long total=0;
 
   int last1=0;
@@ -356,11 +369,11 @@ long brrDecode(unsigned char* buf, short* out, long len, unsigned char emphasis)
     for (long i=0; i<=total; i++) {
       x0=x1;
       x1=x2;
-      x2=(i>total)?0:out[i];
+      x2=(i>=total)?0:outOrig[i];
 
       if (i==0) continue;
 
-      out[i-1]=(x0*370+x1*1305+x2*374)>>11;
+      outOrig[i-1]=(x0*370+x1*1305+x2*374)>>11;
     }
   }
 

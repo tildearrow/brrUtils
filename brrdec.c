@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
 
   printf("input: %ld bytes (%ld blocks)\n",actualLen,actualLen/9);
 
-  long decoded=brrDecode(inBuf,outBuf,len,1);
+  long decoded=brrDecode(inBuf,outBuf,len,0);
 
   printf("output: %ld samples\n",decoded);
 
